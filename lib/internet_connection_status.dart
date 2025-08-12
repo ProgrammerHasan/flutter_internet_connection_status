@@ -188,7 +188,7 @@ class NetworkConnectionStatusCard extends HookConsumerWidget {
     final isVisible = useState(true);
 
     return AnimatedPositioned(
-      top: isVisible.value ? 36 : -100,
+      top: isOnline ? 36 : isVisible.value ? 36 : -100,
       left: 0,
       right: 0,
       duration: const Duration(milliseconds: 250),

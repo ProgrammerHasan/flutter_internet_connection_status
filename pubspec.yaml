@@ -1,6 +1,6 @@
 name: internet_connection_status
 description: A Flutter package to detect internet connection and show banners
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/programmerhasan/flutter_internet_connection_status
 repository: https://github.com/programmerhasan/flutter_internet_connection_status
 issue_tracker: https://github.com/programmerhasan/flutter_internet_connection_status/issues
