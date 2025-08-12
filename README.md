@@ -74,7 +74,6 @@ InternetConnectionStatus(
   online: YourCustomOnlineWidget(),
   offline: YourCustomOfflineWidget(),
 );
-
 ```
 
 # Public API
@@ -108,7 +107,6 @@ Add this key to your ios/Runner/Info.plist:
 ```
 <key>com.apple.security.network.server</key>
 <true/>
-
 ```
 
 Dependencies
@@ -117,7 +115,6 @@ connectivity_plus
 internet_connection_checker
 flutter_hooks
 hooks_riverpod
-
 ```
 
 License
