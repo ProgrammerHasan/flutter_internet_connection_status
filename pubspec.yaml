@@ -24,14 +24,8 @@ features:
 topics:
   - connectivity
   - internet
-  - network
   - status
   - flutter
-  - hooks
-  - riverpod
-  - flutter-hooks
-  - connectivity-status
-  - internet-status
   - online-offline
 
 screenshots:
