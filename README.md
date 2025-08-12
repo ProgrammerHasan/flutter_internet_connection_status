@@ -64,6 +64,19 @@ class MyApp extends StatelessWidget {
 }
 ```
 
+# Customization
+```
+InternetConnectionStatus(
+  onlineTitle: "অনলাইনে ফিরে এসেছেন",
+  onlineSubtitle: "ইন্টারনেট সংযোগ পুনরায় সফল হয়েছে।",
+  offlineTitle: "আপনি এখন অফলাইনে",
+  offlineSubtitle: "ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়েছে।",
+  online: YourCustomOnlineWidget(),
+  offline: YourCustomOfflineWidget(),
+);
+
+```
+
 # Public API
 
 - `internetStatusStreamProvider`  
@@ -81,3 +94,37 @@ class MyApp extends StatelessWidget {
 - `ConnectionStatus` enum  
   Enum for `connected` and `disconnected`
 
+# Platform Setup
+
+Android
+Add these permissions to your android/app/src/main/AndroidManifest.xml:
+```
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+```
+iOS
+Add this key to your ios/Runner/Info.plist:
+```
+<key>com.apple.security.network.server</key>
+<true/>
+
+```
+
+Dependencies
+```
+connectivity_plus
+internet_connection_checker
+flutter_hooks
+hooks_riverpod
+
+```
+
+License
+MIT License © ProgrammerHasan
+
+Contributions
+Contributions and suggestions are welcome! Feel free to open issues or PRs.
+
+Contact
+For questions or support, open an issue on GitHub or contact me at programmerhasan.s@gmail.com
