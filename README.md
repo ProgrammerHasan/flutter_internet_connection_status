@@ -50,15 +50,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: const [
-            Center(child: Text("Internet Connection Status Example")),
-            // Put your internet status banner on top
-            InternetConnectionStatus(),
-          ],
-        ),
-      ),
+      home: Stack(
+        children: [
+          Scaffold(
+            body: Center(child: Text("Internet Connection Status Example")),
+          ),
+          InternetConnectionStatus(),
+        ],
+      )
     );
   }
 }
@@ -67,6 +66,8 @@ class MyApp extends StatelessWidget {
 # Customization
 ```
 InternetConnectionStatus(
+  position: InternetConnectionStatusPosition.top
+  onlineTitle: "অনলাইনে ফিরে এসেছেন",
   onlineTitle: "অনলাইনে ফিরে এসেছেন",
   onlineSubtitle: "ইন্টারনেট সংযোগ পুনরায় সফল হয়েছে।",
   offlineTitle: "আপনি এখন অফলাইনে",

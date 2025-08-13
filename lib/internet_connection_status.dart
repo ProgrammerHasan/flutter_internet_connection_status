@@ -13,6 +13,8 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 /// Connection status enum
 enum ConnectionStatus { connected, disconnected }
+/// Status card position enum
+enum InternetConnectionStatusPosition { top, bottom }
 
 /// Provides the current internet connection status as a stream.
 /// Uses Connectivity plus InternetConnectionChecker for accurate status.
@@ -68,6 +70,7 @@ class InternetConnectionStatus extends HookConsumerWidget {
   final String? onlineSubtitle;
   final String? offlineTitle;
   final String? offlineSubtitle;
+  final InternetConnectionStatusPosition? position;
 
   const InternetConnectionStatus({
     super.key,
@@ -77,6 +80,7 @@ class InternetConnectionStatus extends HookConsumerWidget {
     this.onlineSubtitle,
     this.offlineTitle,
     this.offlineSubtitle,
+    this.position,
   });
 
   @override
@@ -131,6 +135,7 @@ class InternetConnectionStatus extends HookConsumerWidget {
             onlineSubtitle: onlineSubtitle,
             offlineTitle: offlineTitle,
             offlineSubtitle: offlineSubtitle,
+            position: position,
           );
     }
 
@@ -144,6 +149,7 @@ class InternetConnectionStatus extends HookConsumerWidget {
             onlineSubtitle: onlineSubtitle,
             offlineTitle: offlineTitle,
             offlineSubtitle: offlineSubtitle,
+            position: position,
           );
     }
 
@@ -156,6 +162,7 @@ class InternetConnectionStatus extends HookConsumerWidget {
             onlineSubtitle: onlineSubtitle,
             offlineTitle: offlineTitle,
             offlineSubtitle: offlineSubtitle,
+            position: position,
           );
     }
 
@@ -173,6 +180,7 @@ class NetworkConnectionStatusCard extends HookConsumerWidget {
   final String? onlineSubtitle;
   final String? offlineTitle;
   final String? offlineSubtitle;
+  final InternetConnectionStatusPosition? position;
 
   const NetworkConnectionStatusCard({
     super.key,
@@ -181,108 +189,120 @@ class NetworkConnectionStatusCard extends HookConsumerWidget {
     this.onlineSubtitle,
     this.offlineTitle,
     this.offlineSubtitle,
+    this.position = InternetConnectionStatusPosition.top,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isVisible = useState(true);
 
+    if(!isVisible.value && !isOnline) {
+      return SizedBox.shrink();
+    }
+
     return AnimatedPositioned(
-      top: isOnline ? 36 : isVisible.value ? 36 : -100,
+      top: position == InternetConnectionStatusPosition.top ? 0 : null,
+      bottom: position == InternetConnectionStatusPosition.bottom ? 0 : null,
       left: 0,
       right: 0,
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
       child: Material(
         color: Colors.transparent,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(2, 4),
-                  ),
-                ],
-                border: isOnline
-                    ? const Border(
-                  left: BorderSide(color: Colors.green, width: 4),
-                )
-                    : const Border(
-                  left: BorderSide(color: Colors.grey, width: 4),
-                ),
-              ),
-              child: ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.5),
-                          width: 1,
-                        ),
+        child: SafeArea(
+          minimum: position == InternetConnectionStatusPosition.bottom ? EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom) : EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(2, 4),
                       ),
-                      child: Icon(
-                        isOnline ? Icons.wifi : Icons.wifi_off,
-                        color: isOnline ? Colors.green : Colors.grey,
-                      ),
+                    ],
+                    border: isOnline
+                        ? const Border(
+                      left: BorderSide(color: Colors.green, width: 4),
+                    )
+                        : const Border(
+                      left: BorderSide(color: Colors.grey, width: 4),
                     ),
                   ),
-                ),
-                title: Text(
-                  isOnline
-                      ? onlineTitle ?? "You’re back to internet"
-                      : offlineTitle ?? "You're offline now",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Colors.black54),
-                ),
-                subtitle: Text(
-                  isOnline
-                      ? onlineSubtitle ?? "Hurray! Internet is connected."
-                      : offlineSubtitle ?? "Oops! Internet is disconnected.",
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                ),
-                trailing: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                    child: InkWell(
-                      onTap: () => isVisible.value = false,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.5),
-                            width: 1,
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.3),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.5),
+                              width: 1,
+                            ),
+                          ),
+                          child: Icon(
+                            isOnline ? Icons.wifi : Icons.wifi_off,
+                            color: isOnline ? Colors.green : Colors.grey,
                           ),
                         ),
-                        child: const Icon(
-                          Icons.close,
-                          size: 16,
-                          color: Colors.grey,
+                      ),
+                    ),
+                    title: Text(
+                      isOnline
+                          ? onlineTitle ?? "You’re back to internet"
+                          : offlineTitle ?? "You're offline now",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.black54),
+                    ),
+                    subtitle: Text(
+                      isOnline
+                          ? onlineSubtitle ?? "Hurray! Internet is connected."
+                          : offlineSubtitle ?? "Oops! Internet is disconnected.",
+                      style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                    ),
+                    trailing: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        child: InkWell(
+                          onTap: () => isVisible.value = false,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.5),
+                                width: 1,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.close,
+                              size: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ),
                       ),
                     ),
+                    contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   ),
                 ),
-                contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               ),
             ),
           ),

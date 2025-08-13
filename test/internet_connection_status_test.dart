@@ -8,9 +8,14 @@ void main() {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
-          home: Scaffold(
-            body: InternetConnectionStatus(),
-          ),
+            home: Stack(
+              children: [
+                Scaffold(
+                  body: Center(child: Text("Internet Connection Status Example")),
+                ),
+                InternetConnectionStatus(),
+              ],
+            )
         ),
       ),
     );
